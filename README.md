@@ -10,4 +10,5 @@ Tools Index:
    How to run:  1) Before running the script, please set your local path for variable "index_for_web_path" 
                    in the script. 
                    
-                2) Then, push 'index_for_web.json' to .io repository.
+                2) Then, put 'index_for_web.json' to .io repository.
+                
