@@ -201,6 +201,7 @@ if __name__ == '__main__':
     log_fp.write("start to get repo data from github ...\n\n")
     
     i=0
+    ok_repo_num = 0
     try:
          
         githubApiInfo_obj = GithubApiInfoObj()
@@ -261,7 +262,8 @@ if __name__ == '__main__':
             index_for_extension_item += metaObj.generateExtensionJSON()
             index_for_extension_item += INDENT + "},\n" 
             index_for_extension += index_for_extension_item
-            print("Successfully get data!")
+            print("Successfully get data!\n\n")
+            ok_repo_num += 1
             log_fp.write("Successfully get data!\n\n")
 
         index_for_extension = index_for_extension[0:-2]
@@ -274,5 +276,7 @@ if __name__ == '__main__':
         print(str(e))
         log_fp.write(str(e))
     finally:
+        print("Totally get "+str(ok_repo_num)+" repo data successfully!\n\n")
+        log_fp.write("Totally get "+str(ok_repo_num)+" repo data successfully!\n")
         log_fp.close()
         
