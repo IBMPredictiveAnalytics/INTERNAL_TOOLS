@@ -7,7 +7,9 @@ import json
 from optparse import OptionParser 
 import time 
 
-SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/STATS_OPEN_PROJECT.spe"
+#"https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
+#"https://github.com/IBMPredictiveAnalytics/repos_name/blob/master/repos_name.spe?raw=true"
+SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/blob/master/repos_name.spe?raw=true"
 IMG_DOWNLOAD_URL = "https://raw.githubusercontent.com/IBMPredictiveAnalytics/repos_name/master/default.png"
 FILE_NAME= "MANIFEST.MF"
 INDEX_FILE = 'index.json'
@@ -235,8 +237,7 @@ if __name__ == '__main__':
                 log_fp.write("This is not a " + whole_product_name + " repo.\nSwitch to next repo.\n\n\n")
                 continue
             
-            raw_spe_url = "https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
-            repo_spe_url = re.sub('repos_name', repo_name, raw_spe_url)
+            repo_spe_url = re.sub('repos_name', repo_name, SPE_DOWNLOAD_URL)
             spe_name = repo_name+".spe"
             
             spe_saving_path = os.path.join(root_spe_dir,repo_name)
