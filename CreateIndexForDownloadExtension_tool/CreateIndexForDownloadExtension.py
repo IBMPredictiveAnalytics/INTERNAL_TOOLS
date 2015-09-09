@@ -7,9 +7,8 @@ import json
 from optparse import OptionParser 
 import time 
 
-#"https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
 #"https://github.com/IBMPredictiveAnalytics/repos_name/blob/master/repos_name.spe?raw=true"
-SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/blob/master/repos_name.spe?raw=true"
+SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
 IMG_DOWNLOAD_URL = "https://raw.githubusercontent.com/IBMPredictiveAnalytics/repos_name/master/default.png"
 FILE_NAME= "MANIFEST.MF"
 INDEX_FILE = 'index.json'
