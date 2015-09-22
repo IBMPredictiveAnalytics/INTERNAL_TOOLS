@@ -6,6 +6,7 @@ import re
 import json
 from optparse import OptionParser 
 import time 
+import math
 
 #"https://github.com/IBMPredictiveAnalytics/repos_name/blob/master/repos_name.spe?raw=true"
 SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
@@ -25,34 +26,41 @@ class JSONObj:
 
 class GithubApiInfoObj:
     INDENT = '\t'
-    GITHUB_API_URL = "https://api.github.com/orgs/ibmpredictiveanalytics/repos?per_page=1000"
+    GITHUB_API_URL = "https://api.github.com/orgs/ibmpredictiveanalytics/repos?page={0}&per_page={1}"
+    MAX_REPO_NUM = 1000
+    PER_PAGE = 100 
     KEY_LIST = ['repository','description','pushed_at']
     REPOSITORY, DESCRIPTION, PUSHED_AT = 0,1,2
     
     def __init__(self):
-        try:
-            self.api_json_data = json.loads(urllib.request.urlopen(GithubApiInfoObj.GITHUB_API_URL).read().decode('utf-8'))
-        except:
-            raise Exception("Cannot request data from github api: '"+GithubApiInfoObj.GITHUB_API_URL+"'.\n")
         self.item_list = []
-        for item in self.api_json_data:  
-            temp_json_list = []
-            #ignore .io repository
-            if('IBMPredictiveAnalytics.github.io' == item['name']):
-                continue 
-              
-            for key in GithubApiInfoObj.KEY_LIST:
-                if key == 'repository':
-                    key_name_in_api = 'name'
-                else:
-                    key_name_in_api= key
-    
-                try:
-                    temp_json_list.append(JSONObj(key,item[key_name_in_api])) 
-                except:
-                    raise Exception("Github api ("+GithubApiInfoObj.GITHUB_API_URL+") does not provide information of "+key+". Please check!\n")
+        for page_index in range(1, math.floor(GithubApiInfoObj.MAX_REPO_NUM/GithubApiInfoObj.PER_PAGE)+1):  
+            try:
+                api_json_data = json.loads(urllib.request.urlopen(GithubApiInfoObj.GITHUB_API_URL.format(page_index,GithubApiInfoObj.PER_PAGE)).read().decode('utf-8'))
+            except:
+                raise Exception("Cannot request data from github api: '"+GithubApiInfoObj.GITHUB_API_URL+"'.\n")
             
-            self.item_list.append(temp_json_list)       
+            if len(api_json_data) == 0:
+                break
+                        
+            for item in api_json_data:  
+                temp_json_list = []
+                #ignore .io repository
+                if('IBMPredictiveAnalytics.github.io' == item['name']):
+                    continue 
+                  
+                for key in GithubApiInfoObj.KEY_LIST:
+                    if key == 'repository':
+                        key_name_in_api = 'name'
+                    else:
+                        key_name_in_api= key
+        
+                    try:
+                        temp_json_list.append(JSONObj(key,item[key_name_in_api].strip())) 
+                    except:
+                        raise Exception("Github api ("+GithubApiInfoObj.GITHUB_API_URL+") does not provide information of "+key+". Please check!\n")
+                
+                self.item_list.append(temp_json_list)       
 
 class InfoJSONObj:
     KEY_LIST = ['type', 'provider', 'software', 'language', 'category', 'promotion']
@@ -79,7 +87,7 @@ class InfoJSONObj:
                     val = self.repo_info_json[key][0]
                 else:
                     val = self.repo_info_json[key]
-                self.item_list.append(JSONObj(key,val))
+                self.item_list.append(JSONObj(key,val.strip()))
             except:
                 raise ValueError("info.json missed some of the items below:\n"
                                 "type, provider, software, language, category, promotion.")       
@@ -129,7 +137,8 @@ class MetaObj:
             line_list = meta_content.split('\n')
             modified_str, temp, key_list = '', '', []
 
-            for item in line_list:           
+            for item in line_list:  
+                item = item.replace("\"", "\'")         
                 if item[0:1] == ' ':
                     temp = temp+item[1:]            
                 else:
@@ -203,8 +212,7 @@ if __name__ == '__main__':
     
     i=0
     ok_repo_num = 0
-    try:
-         
+    try:        
         githubApiInfo_obj = GithubApiInfoObj()
         for item in githubApiInfo_obj.item_list:
             i+=1
