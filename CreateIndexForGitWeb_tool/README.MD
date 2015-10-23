@@ -20,5 +20,6 @@
     
           1. Open cmd dialog
 
-					2. Input following command. Replace your own directories to save .spe file and index file
-					    python CreateIndexForDownloadExtension.py -s "C:\spe" -o "C:\index" -p stats            
+	  2. Input following command. Replace your own directories to save .spe file and index file
+	          
+                python CreateIndexForDownloadExtension.py -s "C:\spe" -o "C:\index" -p stats            
