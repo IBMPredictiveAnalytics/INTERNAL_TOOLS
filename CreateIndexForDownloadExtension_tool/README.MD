@@ -10,19 +10,19 @@
 
   Options:
 
-	    -h, --help          show help message and exit  
+	-h, --help          show help message and exit  
 
-		  -s, --spedir        Directory to save spe.
+	-s, --spedir        Directory to save spe.
 
-			-o, --output        Choose a dir to save index file.
+	-o, --output        Choose a dir to save index file.
 
-			-p, --product       Choose index for which product: 1. modeler 2. stats. //Currently there are only two products name here.
+	-p, --product       Choose index for which product: 1. modeler 2. stats. 
                    
   How to run:	
-      1. Download CreateIndexForDownloadExtension.py.
+	1. Download CreateIndexForDownloadExtension.py.
       
-      2. Open cmd dialog.
+	2. Open cmd dialog.
       
-      2. Input below command. Set your own directory ro save .spe, index file, and product name.
+	3. Input below command. Set your own directory ro save .spe, index file, and product name.
 
 	       python CreateIndexForDownloadExtension.py -s "C:\spe" -o "C:\index" -p stats   
