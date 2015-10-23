@@ -19,6 +19,7 @@
 	-p, --product       Choose index for which product: 1. modeler 2. stats. 
                    
   How to run:	
+  
 	1. Download CreateIndexForDownloadExtension.py.
       
 	2. Open cmd dialog.
