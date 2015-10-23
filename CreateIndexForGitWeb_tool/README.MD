@@ -16,8 +16,8 @@
         
           1. Download this CreateIndexForGithubWeb.py.
     
-          1. Open cmd dialog.
+          2. Open cmd dialog.
 
-	  2. Input following command in the dialog. Set your own directory to save index_for_web json.
+	  3. Input following command in the dialog. Set your own directory to save index_for_web json.
 	          
                 python CreateIndexForGithubWeb.py -o "C:\Users\your_directory"         
