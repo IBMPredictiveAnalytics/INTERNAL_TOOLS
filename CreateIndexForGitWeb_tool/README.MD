@@ -12,12 +12,12 @@
 
 		-o, --output        Choose a dir to save index_for_web.json file.
                    
-        How to run:	
+	How to run:	
         
-          1. Download this CreateIndexForGithubWeb.py.
+		1. Download this CreateIndexForGithubWeb.py.
     
-          2. Open cmd dialog.
+		2. Open cmd dialog.
 
-	  3. Input following command in the dialog. Set your own directory to save index_for_web json.
+		3. Input following command in the dialog. Set your own directory to save index_for_web json.
 	          
-                python CreateIndexForGithubWeb.py -o "C:\Users\your_directory"         
+			python CreateIndexForGithubWeb.py -o "C:\Users\your_directory"         
