@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-  
 import urllib.request
 import urllib.error
-import json
-import re
-import math
+import json,re, math, os
+from optparse import OptionParser 
 
 UNICODE_ERROR_LIST = []
 HTTP_ERROR_LIST = []
@@ -10,7 +10,8 @@ VALUE_ERROR_LIST = []
 OTHER_ERROR_LIST = []
 MAX_REPO_NUM = 1000
 PER_PAGE = 100
-INDENT_SPACE = '    '
+INDENT_SPACE = '\t'
+INDEX_NAME = 'index_for_web.json'
 
 
 def createIndexForWeb(index_for_web_path):
@@ -81,9 +82,19 @@ def printError(error_list, error_msg):
         print(error_msg+": "+repo_name)
 
 if __name__ == '__main__':
-    #Please use your own path of 'index_for_web.json'
-    index_for_web_path = r'C:\Users\wujz\Desktop\index_for_web.json'
+    usage = "usage: %prog [options] arg1"  
+    parser = OptionParser(usage)  
+    parser.add_option("-o", "--output", dest="outdir", action='store', help="Choose a dir to save index_for_web file.")
+    (options, args) = parser.parse_args() 
+    
+    if getattr(options, 'outdir') == None or not os.path.isdir(options.outdir):
+        parser.error("Please input a valid directory to save index_for_web.json file\n\n")  
+    else:
+        index_for_web_path = os.path.join(options.outdir,INDEX_NAME)
+    
+    print("The index_for_web.json is saved in:"+index_for_web_path)         
     createIndexForWeb(index_for_web_path)
+    print("Cannot get below repositories information. Please check!")
     printError(UNICODE_ERROR_LIST, "UnicodeDecodeError")
     printError(HTTP_ERROR_LIST, "HTTPError")
     printError(VALUE_ERROR_LIST, "ValueError")
