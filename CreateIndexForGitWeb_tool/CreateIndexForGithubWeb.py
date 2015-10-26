@@ -77,7 +77,7 @@ def createIndexForWeb(index_for_web_path):
             index_for_web_json += json_item
     index_for_web_json = index_for_web_json[0:-2]
     index_for_web_json += '\n]\n}'
-	index_for_web = open(index_for_web_path,'w')
+    index_for_web = open(index_for_web_path,'w')
     index_for_web.write(index_for_web_json)  
     index_for_web.close()
 
