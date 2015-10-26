@@ -24,7 +24,6 @@ def createIndexForWeb(index_for_web_path):
     key_list = ['type', 'provider', 'software', 'language', 'category', 'promotion']
        
     index_for_web_json = "{\n\"repository_index\":[\n"
-    index_for_web = open(index_for_web_path,'w')
     
     for page_index in range(1, page_num+1):
         cur_api_url = api_url.format(str(page_index),str(PER_PAGE))
@@ -45,6 +44,8 @@ def createIndexForWeb(index_for_web_path):
             
             try:
                 repo_info_json = json.loads(urllib.request.urlopen(repo_info_json_url).read().decode('utf-8'))
+                if repo_info_json['promotion'] not in ['Yes','No']:
+                    continue
             except UnicodeDecodeError:
                 UNICODE_ERROR_LIST.append(repo_name+"  "+repo_push_time)
                 continue
@@ -58,6 +59,7 @@ def createIndexForWeb(index_for_web_path):
                 OTHER_ERROR_LIST.append(repo_name+"  "+repo_push_time)
                 continue
             
+            
             json_item = INDENT_SPACE+'{\n'
             json_item += INDENT_SPACE + INDENT_SPACE + "\"repository\":" +"\"" + repo_name +"\",\n" 
             json_item += INDENT_SPACE + INDENT_SPACE + "\"description\":" +"\"" + repo_desc +"\",\n"
@@ -67,13 +69,15 @@ def createIndexForWeb(index_for_web_path):
                 if type(repo_info_json[key]) == list:
                     val = repo_info_json[key][0]
                 else:
-                    val = repo_info_json[key]
+                    val = repo_info_json[key]                  
+                    
                 json_item += INDENT_SPACE + INDENT_SPACE + "\"" + key + "\":" + "\"" + val + "\",\n"
             json_item = json_item[0:-2]+'\n'
             json_item += INDENT_SPACE + "},\n"  
             index_for_web_json += json_item
     index_for_web_json = index_for_web_json[0:-2]
     index_for_web_json += '\n]\n}'
+	index_for_web = open(index_for_web_path,'w')
     index_for_web.write(index_for_web_json)  
     index_for_web.close()
 
