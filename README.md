@@ -14,5 +14,3 @@ Tools Index:
 3	Tool Name:	CreatePackage
 
 	Description:	create a zip package for extension hub	
-
-	
