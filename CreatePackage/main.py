@@ -84,4 +84,4 @@ if __name__ == '__main__':
         print(str(traceback.format_exc()))
     except IOError:
         print(str(traceback.format_exc()))
-        print("Need permission to create folder in "+r'C:\Users\Jia Zhong\Desktop'+" or the destination already contains a folder named '"+PACAKAGE+"'")        
+        print("Need permission to create folder in "+options.outdir+" or the destination already contains a folder named '"+PACAKAGE+"'")        
