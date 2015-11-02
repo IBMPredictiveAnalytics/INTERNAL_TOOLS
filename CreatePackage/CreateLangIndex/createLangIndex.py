@@ -58,7 +58,7 @@ def createLangIndex(*args):
  
                 try:
                     repo_lang_content = URILoader.loadURI(repo_lang_uri, "language index file")
-                    lang_json_str = LangPropObj.convertToJSONStr(repo_name, repo_lang_content)
+                    lang_json_str = LangPropObj.convertToJSONStr(repo_name, repo_lang_content, lang_item)
                 except Exception as e:
                     if 'HTTPError' in str(e):
                         # some repositories do not have lang file, by default use en file in index for extension file

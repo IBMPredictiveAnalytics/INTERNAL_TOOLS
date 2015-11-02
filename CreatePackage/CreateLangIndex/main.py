@@ -10,7 +10,7 @@ def utest():
     base = r'C:\Users\wujz\Desktop\Package'
     createLangIndex(base, 'stats', os.path.join(base, 'index_for_stats.json'))
     
-if __name__ == '__main__':    
+if __name__ == '__main__':   
     # usage = "usage: %prog [options] arg1 arg2 arg3"  
     usage = "usage: %prog [options] arg1 arg2" 
     parser = OptionParser(usage)  
@@ -33,6 +33,6 @@ if __name__ == '__main__':
         print(str(e))
     except Exception as e:
         print(str(e)) 
-    
+
     # utest()    
         

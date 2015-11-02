@@ -131,7 +131,7 @@ def createExtensionIndex(*args):
             
             
 def getWholeProductName(product_name):
-    if(product_name == "stats"):
+    if(product_name.lower() == "stats"):
         return "SPSS Statistics"
     else:
         return "SPSS Modeler"
