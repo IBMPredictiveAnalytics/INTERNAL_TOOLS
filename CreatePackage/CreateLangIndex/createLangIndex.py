@@ -28,19 +28,17 @@ def createLangIndex(*args):
     #elif product == 'stats':
     #    index_key = RAW_INDEX_KEY.format('stats')
     index_key = RAW_INDEX_KEY
+    langLogger = None
     try:
-        try:
-            lang_path = os.path.join(outdir,LANG_DIR) 
-            os.mkdir(lang_path)
-            root_log_dir = os.path.join(outdir, LOG_DIR_NAME)  
-            langLogger = Logger(os.path.join(root_log_dir,LOG_INFO),'langLogger')
-            langLogger.info("CreateLicenseIndex script start ...")    
-            
-            langLogger.info("Get extension index  ...")
-            repos_set_json = loadExtJSONContent(ext_path)
-            repos_set_json_index = repos_set_json[index_key]   
-        except Exception as e:  
-            raise e
+        lang_path = os.path.join(outdir,LANG_DIR) 
+        os.mkdir(lang_path)
+        root_log_dir = os.path.join(outdir, LOG_DIR_NAME)  
+        langLogger = Logger(os.path.join(root_log_dir,LOG_INFO),'langLogger')
+        langLogger.info("CreateLicenseIndex script start ...")    
+        
+        langLogger.info("Get extension index  ...")
+        repos_set_json = loadExtJSONContent(ext_path)
+        repos_set_json_index = repos_set_json[index_key]   
         
         for lang_item in LANG_LIST:
             fp_content = LANG_INDEX_PRE
@@ -77,8 +75,10 @@ def createLangIndex(*args):
                 raise e
                 
     except Exception as e:
-        langLogger.error(str(e),e)
-        langLogger.info("CreatelangIndex action failed!")
+        if langLogger!=None:
+            langLogger.error(str(e),e)
+            langLogger.info("CreatelangIndex action failed!")
         raise e
     finally:
-        langLogger.close()
+        if langLogger!=None:
+            langLogger.close()

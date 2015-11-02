@@ -36,16 +36,14 @@ def createLicenseIndex(*args):
         #repos_set_uri = RAW_REPOS_SET_URI.format('statisitcs','stats') 
         #index_key = RAW_INDEX_KEY.format('stats')
     index_key = RAW_INDEX_KEY
+    licenseLogger = None
     try:   
         license_obj_list = []        
-        try:
-            lic_path = os.path.join(outdir,LICENSE_DIR)   
-            os.mkdir(lic_path)
-            root_log_dir = os.path.join(outdir, LOG_DIR_NAME) 
-            licenseLogger = Logger(os.path.join(root_log_dir,LOG_INFO),'licenseLogger')
-            licenseLogger.info("CreateLicenseIndex script start ...")
-        except Exception:  
-            raise Exception("IOError: Need permission to write in "+outdir)
+        lic_path = os.path.join(outdir,LICENSE_DIR)   
+        os.mkdir(lic_path)
+        root_log_dir = os.path.join(outdir, LOG_DIR_NAME)  
+        licenseLogger = Logger(os.path.join(root_log_dir,LOG_INFO),'licenseLogger')
+        licenseLogger.info("CreateLicenseIndex script start ...")
         
         try:     
             licenseLogger.info("Get extension list  ...")
@@ -98,12 +96,14 @@ def createLicenseIndex(*args):
         index_fp.write(index_content)
         licenseLogger.info("CreateLicenseIndex action succeeded!")
     except Exception as e:
-        licenseLogger.error(str(e),e)
-        licenseLogger.info("CreateLicenseIndex action failed!")
+        if licenseLogger!=None:
+            licenseLogger.error(str(e),e)
+            licenseLogger.info("CreateLicenseIndex action failed!")
         raise e
     finally:
-        licenseLogger.info("Totally get "+str(len(license_obj_list))+" type(s) of license from "+str(repo_index)+" repos!")
-        licenseLogger.close()
+        if licenseLogger!=None:
+            licenseLogger.info("Totally get "+str(len(license_obj_list))+" type(s) of license from "+str(repo_index)+" repos!")
+            licenseLogger.close()
                     
 def addObj(repo_name, repo_license_content,license_obj_list):
     license_obj = LicenseItemObj()

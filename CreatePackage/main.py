@@ -56,21 +56,21 @@ if __name__ == '__main__':
             mainLogger.info("Main Script start ... ")
             
             # create index for extension
-            mainLogger.info("'CreateExtensionIndex start...")
+            mainLogger.info("'CreateExtensionIndex' start...")
             ext_path = createExtensionIndex(savePath, ABBR_PRODUCT) 
-            mainLogger.info("'CreateExtensionIndex complete...")
+            mainLogger.info("'CreateExtensionIndex' complete...")
             
             '''
             Description: create two threads -- one aimed at creating license index; the other aimed at creating lang index
             '''
             # create thread to get index for license
-            mainLogger.info("'CreateLicenseIndex thread start...")
+            mainLogger.info("'CreateLicenseIndex' thread start...")
             runCreateLicenseIndex = runScriptThread(createLicenseIndex, savePath, ext_path)
             runCreateLicenseIndex.setDaemon(True)
             runCreateLicenseIndex.start()
 
             # create thread to get index for language
-            mainLogger.info("CreateLangIndex thread start ...")
+            mainLogger.info("CreateLangIndex' thread start ...")
             runCreateLangIndex = runScriptThread(createLangIndex, savePath, ext_path)
             runCreateLangIndex.setDaemon(True)
             runCreateLangIndex.start()
