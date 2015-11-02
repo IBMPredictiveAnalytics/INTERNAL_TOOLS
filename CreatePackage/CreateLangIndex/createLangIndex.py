@@ -17,7 +17,7 @@ LOG_INFO = 'createLangIndex.log'
 RAW_REPO_LANG_URI = 'https://raw.githubusercontent.com/IBMPredictiveAnalytics/{0}/master/src/lang/{1}/{0}_{1}.properties'
 RAW_INDEX_KEY = "extension_index"
 INDENT = '\t'
-LANG_INDEX_PRE = "{\n"+INDENT+"\"extension_lang\":[\n"+INDENT*2
+LANG_INDEX_PRE = "{\n"+INDENT+"\"extension_lang\":[\n"
 
 def createLangIndex(*args):
     outdir = args[0]
