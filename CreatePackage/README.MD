@@ -1,6 +1,6 @@
 Tool Name:  CreatePackage
 
-Platform：      Windows
+Platform:      Windows
 
 Requirement:    Python3.4.3
 
