@@ -11,10 +11,6 @@ Tools Index:
  	
 	Description:	create index for extensions
 
-3.	Tool Name:	CreatePackage
-
-	Description:	create a zip package for extension hub	
-
-4.	Tool Name:	CreatePackage
+5.	Tool Name:	CreatePackage
 
 	Description:	create zip package for stats extensions
