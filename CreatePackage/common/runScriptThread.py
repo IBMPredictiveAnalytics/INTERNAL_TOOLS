@@ -5,7 +5,7 @@ Created on Oct 27, 2015
 '''
 import threading,traceback,sys
 
-class runScriptThread(threading.Thread): #The timer class is derived from the class threading.Thread
+class runScriptThread(threading.Thread): #runScriptThread class is derived from the class threading.Thread
     def __init__(self, funcName, *args):
         threading.Thread.__init__(self)
         self.args = args
