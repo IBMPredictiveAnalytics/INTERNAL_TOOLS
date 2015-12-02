@@ -11,27 +11,31 @@ from CreateExtensionIndex.createExtensionIndex import createExtensionIndex
 from CreateLangIndex.createLangIndex import createLangIndex 
 from common.packageTool import zip_dir
 import os,traceback,shutil
+
 LOG_DIR_NAME = 'log'
 PACAKAGE_NAME = "Package"
 LOG_NAME = 'main.log'
-ABBR_PRODUCT = 'stats'
-WHOLE_PRO_NAME = 'Statistics'
 ZIP_NAME = 'extension_index_resbundles'    
  
 if __name__ == '__main__':
-    usage = "usage: %prog [options] arg1"  
+    usage = "usage: %prog [options] arg1 arg2"  
     parser = OptionParser(usage)  
     parser.add_option("-o", "--outdir", dest="outdir", action='store', help="Directory to save Statistics.zip")
-    #parser.add_option("-p", "--product", dest="productName", action='store', help="Choose license index for which product: 1. modeler 2. stats.")
+    parser.add_option("-p", "--product", dest="productName", action='store', help="Choose license index for which product: 1. modeler 2. stats.")
     (options, args) = parser.parse_args() 
     
     if not os.path.isdir(options.outdir):
         parser.error("Please input a valid directory to save Statistics.zip.")
-    #if options.productName.lower() != "modeler" and options.productName.lower() != "stats":  
-    #    parser.error("Please input valid product name modeler or stats (casesensitive) for your index file")
+        
+    productName = options.productName.lower()
+    print(productName=='modeler')
+    if productName != "modeler" and productName != "stats":  
+        parser.error(productName+" is not a legal parameter. "+"Please input valid product name 'modeler' or 'stats' for your index file")
+    
     
     try: 
-        savePath = os.path.join(options.outdir,PACAKAGE_NAME)
+        # savePath = .../Package
+        savePath = os.path.join(options.outdir,PACAKAGE_NAME) 
         if os.path.isdir(savePath):
             print("The output folder "+savePath+" already existed. Delete it to create a new one or exit?(y/n):")
             ch = input()
@@ -45,7 +49,8 @@ if __name__ == '__main__':
                     shutil.rmtree(savePath, ignore_errors = True)
                 except:
                     raise Exception("Cannot get administrator permission to delete "+savePath)
-        #savePath = os.path.join(r'C:\Users\wujz\Desktop',PACAKAGE)
+                
+        # logPath = ../Package/log        
         logPath = os.path.join(savePath,LOG_DIR_NAME)
         os.mkdir(savePath)
         os.mkdir(logPath)
@@ -57,7 +62,7 @@ if __name__ == '__main__':
             
             # create index for extension
             mainLogger.info("'CreateExtensionIndex' start...")
-            ext_path = createExtensionIndex(savePath, ABBR_PRODUCT) 
+            ext_path = createExtensionIndex(savePath, productName) 
             mainLogger.info("'CreateExtensionIndex' complete...")
             
             '''

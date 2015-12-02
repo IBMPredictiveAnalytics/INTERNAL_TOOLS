@@ -9,17 +9,12 @@ from CreateExtensionIndex.InfoJSONObj import InfoJSONObj
 from CreateExtensionIndex.MetaObj import MetaObj
 from common.Logger import Logger
 
-import socket
-import urllib.request
-import zipfile
-import os
-import re
-import time 
-import shutil
+import socket,urllib.request,zipfile,os,time,shutil
 
 #"https://github.com/IBMPredictiveAnalytics/repos_name/blob/master/repos_name.spe?raw=true"
-SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
-IMG_DOWNLOAD_URL = "https://raw.githubusercontent.com/IBMPredictiveAnalytics/repos_name/master/default.png"
+EXT_CONTENT_URL = "https://github.com/IBMPredictiveAnalytics/{0}/raw/master/{1}"
+#SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
+IMG_DOWNLOAD_URL = "https://raw.githubusercontent.com/IBMPredictiveAnalytics/{0}/master/default.png"
 FILE_NAME= "MANIFEST.MF"
 RAW_INDEX_FILE = 'extension_info_index.json'
 INDENT = '\t'
@@ -27,26 +22,33 @@ LOG_INFO = "createExtensionIndex.log"
 META_DIR = 'META-INF' 
 TIMEOUT = 600     
 LOG_DIR_NAME = 'log'
+START_WORD = 'extension_index'
 
 def createExtensionIndex(*args):
     socket.setdefaulttimeout(TIMEOUT)
     indexdir = args[0]
     product = args[1]
     
-    
-    START_WORDS = "{\n\"extension_index\":[\n"    
+    if product=='stats':
+        tail = '.spe'
+    else: 
+        tail = '.mpe'  
+         
     cur_time = time.strftime('%Y%m%d%H%M%S',time.localtime(time.time()))  
-    root_spe_dir = os.path.join(indexdir,"spe"+cur_time) 
+    root_content_dir = os.path.join(indexdir,tail+cur_time) 
     root_log_dir = os.path.join(indexdir, LOG_DIR_NAME)   
+    
+    if not os.path.exists(root_log_dir):
+        os.mkdir(root_log_dir)
        
     try:
-        os.mkdir(root_spe_dir)
+        os.mkdir(root_content_dir)            
         extLogger = Logger(os.path.join(root_log_dir,LOG_INFO),'extLogger')
         extLogger.info("CreateExtensionIndex script start ...")
     except IOError as e:  
-        raise IOError("IOError: Need permission to write in "+indexdir)
+        raise IOError("IOError: Need permission to write in "+indexdir+ " or this folder does not exist")
     
-    index_for_extension = START_WORDS
+    index_for_extension = "{\n\""+START_WORD+"\":[\n"
     whole_product_name = getWholeProductName(product) 
     extLogger.info("start to get repo data from github ...")
     ext_output_path = os.path.join(indexdir, RAW_INDEX_FILE)
@@ -74,34 +76,36 @@ def createExtensionIndex(*args):
                 
             index_for_extension_item += generateJSONStr(info_json.item_list)
             repo_software = info_json.item_list[info_json.__class__.SOFTWARE].val
-            index_for_extension_item += INDENT*2 + "\"download_link\":" +"\"" + re.sub('repos_name', repo_name, SPE_DOWNLOAD_URL) +"\",\n"
-            index_for_extension_item += INDENT*2 + "\"image_link\":" +"\"" + re.sub('repos_name', repo_name, IMG_DOWNLOAD_URL) +"\",\n"
+                      
+            content_name = repo_name+tail  
+            repo_content_url = EXT_CONTENT_URL.format(repo_name,content_name)
+            repo_img_url = IMG_DOWNLOAD_URL.format(repo_name)
+                    
+            index_for_extension_item += INDENT*2 + "\"download_link\":" +"\"" + repo_content_url +"\",\n"
+            index_for_extension_item += INDENT*2 + "\"image_link\":" +"\"" + repo_img_url +"\",\n"
             
             if repo_software != whole_product_name:
                 extLogger.info("This is not a " + whole_product_name + " repo. Switch to next repo.")
                 continue
             
-            repo_spe_url = re.sub('repos_name', repo_name, SPE_DOWNLOAD_URL)
-            spe_name = repo_name+".spe"
-            
-            spe_saving_path = os.path.join(root_spe_dir,repo_name)
-            os.mkdir(spe_saving_path)
+            content_saving_path = os.path.join(root_content_dir,repo_name)
+            os.mkdir(content_saving_path)
             
             try:
-                urllib.request.urlretrieve(repo_spe_url, os.path.join(spe_saving_path,spe_name))
-                srcZip = zipfile.ZipFile(os.path.join(spe_saving_path,spe_name), "r", zipfile.ZIP_DEFLATED)
+                urllib.request.urlretrieve(repo_content_url, os.path.join(content_saving_path,content_name))
+                srcZip = zipfile.ZipFile(os.path.join(content_saving_path,content_name), "r", zipfile.ZIP_DEFLATED)
             except:
-                extLogger.warning("This repo '"+repo_name+" does not have spe package. Please check! Switch to next repo.")
+                extLogger.warning("This repo '"+repo_name+" does not have "+tail+" package. Please check! Switch to next repo.")
                 continue
             
             for file in srcZip.namelist():
-                if not os.path.isdir(spe_saving_path):     
-                    os.mkdir(spe_saving_path)
+                if not os.path.isdir(content_saving_path):     
+                    os.mkdir(content_saving_path)
                 if FILE_NAME in file:
-                    srcZip.extract(file, spe_saving_path)
+                    srcZip.extract(file, content_saving_path)
             srcZip.close()
             
-            meta_path = os.path.join(spe_saving_path, META_DIR, FILE_NAME)
+            meta_path = os.path.join(content_saving_path, META_DIR, FILE_NAME)
             metaObj = MetaObj(meta_path)
             index_for_extension_item += metaObj.generateExtensionJSON()
             index_for_extension_item += INDENT + "},\n" 
@@ -122,7 +126,7 @@ def createExtensionIndex(*args):
         raise e
     finally:
         extLogger.info("Totally get "+str(ok_repo_num)+" repo data.")
-        clear(root_spe_dir)
+        clear(root_content_dir)
 
     if not os.path.exists(ext_output_path):
         raise Exception("Fail to create extension index file! Please contact github administrator!")   
@@ -142,12 +146,8 @@ def generateJSONStr(json_obj_list):
         json_item_str += INDENT*2 + item.getJSONStr() 
     return json_item_str
 
-def clear(spedir):
-    if os.path.isdir(spedir):
-        os.system(r"C:\Windows\System32\attrib -r "+ spedir+"\*.* " + " /s /d")
-        shutil.rmtree(spedir, ignore_errors = True)
-        
-
-
-
+def clear(contentdir):
+    if os.path.isdir(contentdir):
+        os.system(r"C:\Windows\System32\attrib -r "+ contentdir+"\*.* " + " /s /d")
+        shutil.rmtree(contentdir, ignore_errors = True) 
     

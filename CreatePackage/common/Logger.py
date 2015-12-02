@@ -4,7 +4,7 @@ Created on Oct 22, 2015
 @author: wujz
 '''
 # -*- coding: utf-8 -*-  
-import logging,traceback
+import logging,traceback,os
 
 # CRITICAL > ERROR > WARNING > INFO > DEBUG > NOTSET
 class Logger:
@@ -14,7 +14,11 @@ class Logger:
         self.logger.setLevel(logging.DEBUG)   
         self.filename = filename 
         
-        try:       
+        try: 
+            if not os.path.exists(self.filename):
+                fp = open(self.filename, 'w')
+                fp.close()
+              
             self.addFileHandler(filename, formatter)
             self.addStreamHandler(formatter)
         except Exception as e:

@@ -28,13 +28,6 @@ def createLicenseIndex(*args):
     outdir = args[0]
     ext_path = args[1]        
     
-    #if product.lower() == "modeler":
-        #repos_set_uri = RAW_REPOS_SET_URI.format('modeler','modeler')
-        #index_key = RAW_INDEX_KEY.format('modeler')
-    #elif product.lower() == 'stats':
-        # wrong spell of statistics
-        #repos_set_uri = RAW_REPOS_SET_URI.format('statisitcs','stats') 
-        #index_key = RAW_INDEX_KEY.format('stats')
     index_key = RAW_INDEX_KEY
     licenseLogger = None
     try:   

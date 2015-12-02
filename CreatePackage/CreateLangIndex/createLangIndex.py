@@ -22,11 +22,7 @@ LANG_INDEX_PRE = "{\n"+INDENT+"\"extension_lang\":[\n"
 def createLangIndex(*args):
     outdir = args[0]
     ext_path = args[1]
-     
-    #if product == "modeler":
-    #    index_key = RAW_INDEX_KEY.format('modeler')
-    #elif product == 'stats':
-    #    index_key = RAW_INDEX_KEY.format('stats')
+
     index_key = RAW_INDEX_KEY
     langLogger = None
     try:
@@ -66,7 +62,7 @@ def createLangIndex(*args):
 
                 fp_content += lang_json_str
                 
-            try:
+            try:                
                 fp_content = fp_content[0:-2]+'\n'+INDENT+']\n}'
                 fp = open(os.path.join(lang_path, lang_item+'.json'), 'w', encoding='utf-8') 
                 fp.write(fp_content)
