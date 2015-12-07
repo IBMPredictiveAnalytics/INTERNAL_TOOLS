@@ -44,8 +44,6 @@ def createIndexForWeb(index_for_web_path):
             
             try:
                 repo_info_json = json.loads(urllib.request.urlopen(repo_info_json_url).read().decode('utf-8'))
-                if repo_info_json['promotion'] not in ['Yes','No']:
-                    continue
             except UnicodeDecodeError:
                 UNICODE_ERROR_LIST.append(repo_name+"  "+repo_push_time)
                 continue
