@@ -7,10 +7,10 @@ Tools Index:
 
 	Description:	create a index file for github web 	
 
-2.	Tool Name:	CreatePackage
-
-	Description:	create zip package for stats extensions
-	
-3. 	Tool Name:	CreateIndexForDownloadExtension
+2. 	Tool Name:	CreateIndexForDownloadExtension
  	
 	Description:	create index for extensions
+
+3.	Tool Name:	CreatePackage
+
+	Description:	create a zip package for extension hub	
