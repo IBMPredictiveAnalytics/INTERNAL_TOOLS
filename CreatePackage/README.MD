@@ -1,12 +1,12 @@
-Tool Name:  CreatePackage
+Tool Name:      CreatePackage
 
-Platform:      Windows
+Platform:       Windows
 
 Requirement:    Python3.4.3
 
 Description:    This tool is automatically used to create zip package for stats extensions.
 
-Usage:      python main.py [options] arg1 arg2
+Usage:          python main.py [options] arg1 arg2
 
 Options:
 
