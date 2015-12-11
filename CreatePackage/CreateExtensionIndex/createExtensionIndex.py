@@ -93,11 +93,11 @@ def createExtensionIndex(*args):
             
             try:
                 urllib.request.urlretrieve(repo_content_url, os.path.join(content_saving_path,content_name))
-                srcZip = zipfile.ZipFile(os.path.join(content_saving_path,content_name), "r", zipfile.ZIP_DEFLATED)
             except:
                 extLogger.warning("This repo '"+repo_name+" does not have "+tail+" package. Please check! Switch to next repo.")
                 continue
             
+            srcZip = zipfile.ZipFile(os.path.join(content_saving_path,content_name), "r", zipfile.ZIP_DEFLATED)
             for file in srcZip.namelist():
                 if not os.path.isdir(content_saving_path):     
                     os.mkdir(content_saving_path)
