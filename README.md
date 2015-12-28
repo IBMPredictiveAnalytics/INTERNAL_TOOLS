@@ -13,4 +13,8 @@ Tools Index:
 
 3.	Tool Name:	CreatePackage
 
-	Description:	create a zip package for extension hub	
+	Description:	create a zip package for extension hub
+	
+4.	Tool Name:	AutoOperationScripts
+	
+	Description:	Auto scripts used to create release, upload files, change content, and so on
