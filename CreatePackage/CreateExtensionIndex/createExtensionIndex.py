@@ -7,12 +7,14 @@ Created on Oct 22, 2015
 from CreateExtensionIndex.GithubApiInfoObj import GithubApiInfoObj
 from CreateExtensionIndex.InfoJSONObj import InfoJSONObj
 from CreateExtensionIndex.MetaObj import MetaObj
+from CreateExtensionIndex.GetLatestTag import getLatestTagNO
 from common.Logger import Logger
 
 import socket,urllib.request,zipfile,os,time,shutil
 
 #"https://github.com/IBMPredictiveAnalytics/repos_name/blob/master/repos_name.spe?raw=true"
-EXT_CONTENT_URL = "https://github.com/IBMPredictiveAnalytics/{0}/raw/master/{1}"
+#EXT_CONTENT_URL = "https://github.com/IBMPredictiveAnalytics/{0}/raw/master/{1}"
+EXT_CONTENT_URL = r'https://github.com/IBMPredictiveAnalytics/{0}/releases/download/{1}/{2}'
 #SPE_DOWNLOAD_URL = "https://github.com/IBMPredictiveAnalytics/repos_name/raw/master/repos_name.spe"
 IMG_DOWNLOAD_URL = "https://raw.githubusercontent.com/IBMPredictiveAnalytics/{0}/master/default.png"
 FILE_NAME= "MANIFEST.MF"
@@ -76,18 +78,19 @@ def createExtensionIndex(*args):
                 
             index_for_extension_item += generateJSONStr(info_json.item_list)
             repo_software = info_json.item_list[info_json.__class__.SOFTWARE].val
+                        
+            if repo_software != whole_product_name:
+                extLogger.info("This is not a " + whole_product_name + " repo. Switch to next repo.")
+                continue
                       
             content_name = repo_name+tail  
-            repo_content_url = EXT_CONTENT_URL.format(repo_name,content_name)
+            #repo_content_url = EXT_CONTENT_URL.format(repo_name,content_name)
+            repo_content_url = EXT_CONTENT_URL.format(repo_name,getLatestTagNO(repo_name),content_name)
             repo_img_url = IMG_DOWNLOAD_URL.format(repo_name)
                     
             index_for_extension_item += INDENT*2 + "\"download_link\":" +"\"" + repo_content_url +"\",\n"
             index_for_extension_item += INDENT*2 + "\"image_link\":" +"\"" + repo_img_url +"\",\n"
-            
-            if repo_software != whole_product_name:
-                extLogger.info("This is not a " + whole_product_name + " repo. Switch to next repo.")
-                continue
-            
+
             content_saving_path = os.path.join(root_content_dir,repo_name)
             os.mkdir(content_saving_path)
             
