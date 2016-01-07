@@ -18,3 +18,7 @@ Tools Index:
 4.	Tool Name:	AutoOperationScripts
 	
 	Description:	Auto scripts used to create release, upload files, change content, and so on
+
+5.	Tool Name: 	ExtDownloadReport
+
+	Description:	generate download counts in .csv files for extensions in ibmpredictiveanalytics

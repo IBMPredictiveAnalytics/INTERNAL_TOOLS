@@ -13,7 +13,7 @@ INDEX_FILE = 'extension_info_index.json'
 RELEASE_INFO_URL = r'https://api.github.com/repos/{0}/{1}/releases'
 
 def sendRequest(url, method='GET', data=None, headers={}):  
-    TOKEN = '86453c61dd94ef247e293cde22934d0758bb2b6d'
+    TOKEN = 'YOUTR_TOKEN'
     try:
         if data!=None:
             data = data.encode('utf-8')
@@ -174,5 +174,3 @@ def createCSVFile(url, output_filename, hist_folder):
                 os.remove(package_file)
     except Exception as e:
         raise e
-
-            
