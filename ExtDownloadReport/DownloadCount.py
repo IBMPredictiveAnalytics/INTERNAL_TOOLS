@@ -121,9 +121,6 @@ def getLastMonthTotDnCount(hist_folder):
     
     tot_dn_list = dict()
     for row in spamreader:
-        print(row)
-        print(row[0])
-        print(row[2])
         tot_dn_list[row[0]] = row[2]
     return tot_dn_list
 
