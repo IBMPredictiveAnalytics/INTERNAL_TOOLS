@@ -88,15 +88,3 @@ class emailSender(object):
             raise e
         finally:
             self.close()
-
-if __name__=='__main__':
-    # test code
-    month = time.strftime('%b, %Y',time.localtime(time.time()))
-    print(month)
-    eSender = emailSender(r'C:\Users\wujz\Desktop\format.csv')
-    MESSAGE = "Report Month: {0}\n"+"Mail Server: 9.30.199.60:25\n" +"Top 10 Extensions: \nSee detalied information in the attachment."
-<<<<<<< HEAD
-    eSender.sendEmail(MESSAGE.format(month))
-=======
-    eSender.sendEmail(MESSAGE.format(month))
->>>>>>> origin/master
