@@ -3,7 +3,7 @@ Created on Jan 6, 2016
 
 @author: wujz
 '''
-import os,sys,urllib.request,zipfile,json,csv,traceback,time
+import os,sys,urllib.request,zipfile,json,csv,traceback,time,re,shutil
 from EmailSender import emailSender
 
 INDEX_PACKAGE_URL = {'stats':r'https://github.com/IBMPredictiveAnalytics/IBMPredictiveAnalytics.github.io/blob/master/resbundles/statisitcs/extension_index_resbundles.zip?raw=true',
@@ -84,14 +84,57 @@ def getExtNameList(index_file_path):
         raise Exception('Cannot find index file')
     return ext_name_list
 
-def getExtList(url, product):
+def getTime(file):
+    pat = re.compile(r'(\d{6})')
+    time_int = pat.search(file)
+    
+    if time_int:
+        return int(time_int.group())
+    else:
+        return 0
+
+def getLastFile(hist_folder):
+    file_list = os.listdir(hist_folder)
+    
+    if file_list==None or len(file_list)==0:
+        return None
+    
+    latest = getTime(file_list[0])
+    latest_file = file_list[0]
+    for item in file_list:
+        tmp = getTime(item)
+        if tmp > latest:
+            latest = tmp
+            latest_file = item
+    if latest==0:
+        return None
+    else:
+        return latest_file
+    
+def getLastMonthTotDnCount(hist_folder):
+    latest_file = getLastFile(hist_folder)
+    
+    if latest_file==None:
+        return None
+    csvfile = open(os.path.join(hist_folder,latest_file), 'r', newline='')
+    spamreader = csv.reader(csvfile,delimiter=',', quotechar='|')
+    
+    tot_dn_list = dict()
+    for row in spamreader:
+        print(row)
+        print(row[0])
+        print(row[2])
+        tot_dn_list[row[0]] = row[2]
+    return tot_dn_list
+
+def createCSVFile(url, output_filename, hist_folder):
     path = sys.path[0]
-    print(path)
     package_file = os.path.join(path, PACKAGE_NAME)
     
     if os.path.isfile(package_file):
         os.remove(package_file)
     
+    last_count_list = getLastMonthTotDnCount(hist_folder)
     try:
         urllib.request.urlretrieve(url, package_file) 
     
@@ -99,12 +142,11 @@ def getExtList(url, product):
             unzip_file(package_file, path)
             ext_name_list = getExtNameList(INDEX_FILE)
             
-            csvfile = open('{0}_exts_download_count.csv'.format(product), 'w', newline='')   
-            fieldnames = ['Extension', 'Download Count'] 
+            csvfile = open(output_filename, 'w', newline='')   
+            fieldnames = ['Extension', 'Current Month Download Count', 'Total Download Count'] 
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             
-            tot_count = 0
             for ext in ext_name_list:
                 url = RELEASE_INFO_URL.format('ibmpredictiveanalytics',ext)
                 try:
@@ -118,11 +160,15 @@ def getExtList(url, product):
                     for asset in assets:
                         if ext in asset['name']:
                             count += int(asset['download_count'])
-                            tot_count += count
                             print(count)
                             break
-                writer.writerow({'Extension': ext, 'Download Count': str(count)})
-            writer.writerow({'Extension': 'totoal download count', 'Download Count': str(tot_count)})
+                # first time create csv
+                if last_count_list==None:
+                    writer.writerow({fieldnames[0]: ext, fieldnames[1]: str(count), fieldnames[2]: str(count)})
+                else:
+                    last_tot_count = int(last_count_list[ext])
+                    month_num = count - last_tot_count
+                    writer.writerow({fieldnames[0]: ext, fieldnames[1]: str(month_num), fieldnames[2]: str(count)})
             csvfile.close()
             
             if os.path.isfile(INDEX_FILE):
@@ -133,13 +179,15 @@ def getExtList(url, product):
         raise e
         
 if __name__ == '__main__':
-    try:
-        getExtList(INDEX_PACKAGE_URL['stats'])
-    except Exception as e:
-        traceback.print_exc()
-    mailSender = emailSender(['stats_download_count.csv'])
-    month = time.strftime('%b, %Y',time.localtime(time.time()))
-    print(month)
-    MESSAGE = "Report Month: {0}\nMail Server: 9.30.199.60:25\nSee detalied information in the attachment.\n"
-    mailSender.sendEmail(MESSAGE.format(month))
+    root_path = sys.path[0]
+    stats_csv_file = 'stats_download_count.csv'
+    stats_his_folder = os.path.join(root_path,'stats_history')
+    if not os.path.isdir(stats_his_folder):
+        os.mkdir(stats_his_folder)
+    createCSVFile(INDEX_PACKAGE_URL['stats'],stats_csv_file,stats_his_folder)
+            
+    cur_stats_csv_file = stats_csv_file[:-4]+str(201602)+'.csv'
+    
+    shutil.copyfile(stats_csv_file, os.path.join(stats_his_folder,cur_stats_csv_file))
+
             
