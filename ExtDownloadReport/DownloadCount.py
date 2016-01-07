@@ -179,6 +179,7 @@ def createCSVFile(url, output_filename, hist_folder):
         raise e
         
 if __name__ == '__main__':
+    # test code
     root_path = sys.path[0]
     stats_csv_file = 'stats_download_count.csv'
     stats_his_folder = os.path.join(root_path,'stats_history')
