@@ -22,8 +22,7 @@ class emailSender(object):
         # mail sener info
         self.mail_user="report"
         self.mail_postfix="extdownload"
-        self.mailto_list = ['gfilla@us.ibm.com','fanyey@cn.ibm.com','dstauber@us.ibm.com',
-                            'wujz@cn.ibm.com','dunworth@uk.ibm.com','rjcohen@us.ibm.com'] 
+        self.mailto_list = ['wujz@cn.ibm.com'] 
         
         # attachment name
         self.file_name = file_name
@@ -91,8 +90,9 @@ class emailSender(object):
             self.close()
 
 if __name__=='__main__':
+    # test code
     month = time.strftime('%b, %Y',time.localtime(time.time()))
     print(month)
     eSender = emailSender(r'C:\Users\wujz\Desktop\format.csv')
-    MESSAGE = "Report Month: {0}\n"+"MailServer: 9.30.199.60:25\n" +"Top 10 Extensions: \nSee detalied information in the attachment."
+    MESSAGE = "Report Month: {0}\n"+"Mail Server: 9.30.199.60:25\n" +"Top 10 Extensions: \nSee detalied information in the attachment."
     eSender.sendEmail(MESSAGE.format(month))
