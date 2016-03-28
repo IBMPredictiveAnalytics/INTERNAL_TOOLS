@@ -16,10 +16,16 @@ Options:
 
 How to run: 
 
-    1. Download this CreatePackage.py.
+    1. Download CreatePackage project to local machine
+    
+    2. Generate your own token for get release information. How to generate the token?
+    
+    https://help.github.com/articles/creating-an-access-token-for-command-line-use/
+    
+    3. In line 8th of CreatePackage/CreateExtensionIndex/GetLatestTag.py where "TOKEN = ''", write the token got in step 2. 
 
-    2. Open cmd dialog.
+    4. Open cmd dialog.
 
-    3. Input following command in the dialog. Set your own directory to save index_for_web json.
+    5. Input following command in the dialog. Set your own directory to save index_for_web json.
 
         python C:\CreatePackage\main.py -o "C:\Users\your_directory" -p stats       
