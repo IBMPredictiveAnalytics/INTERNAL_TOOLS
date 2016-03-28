@@ -22,7 +22,7 @@ How to run:
     
     https://help.github.com/articles/creating-an-access-token-for-command-line-use/
     
-    3. In line 8th of CreatePackage/CreateExtensionIndex/GetLatestTag.py where "TOKEN = ''", write the token got in step 2. 
+    3. In line 8th of CreatePackage/CreateExtensionIndex/GetLatestTag.py where "TOKEN = ''", write the token got in step 2 and save the file then close. 
 
     4. Open cmd dialog.
 
