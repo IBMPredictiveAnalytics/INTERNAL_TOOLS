@@ -39,7 +39,10 @@ class GithubApiInfoObj:
                         key_name_in_api = 'name'
                     else:
                         key_name_in_api= key
-        
+                    
+                    if item[key_name_in_api] is None:
+                        item[key_name_in_api] = ""
+                    
                     try:
                         temp_json_list.append(JSONObj(key,item[key_name_in_api].strip())) 
                     except:
