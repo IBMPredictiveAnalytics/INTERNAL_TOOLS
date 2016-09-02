@@ -44,7 +44,6 @@ def createLangIndex(*args):
                 try:
                     repo_name = repo["repository"]
                     i+=1
-                    langLogger.info(lang_item+": "+str(i)+" repo "+repo_name)
                 except Exception:
                     raise Exception("At least one repository in index file does not have repo name. Please check!")    
                 

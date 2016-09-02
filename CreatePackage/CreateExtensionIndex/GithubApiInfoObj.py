@@ -32,16 +32,17 @@ class GithubApiInfoObj:
                 temp_json_list = []
                 #ignore .io repository
                 if('IBMPredictiveAnalytics.github.io' == item['name']):
-                    continue 
-                  
+                    continue                  
                 for key in GithubApiInfoObj.KEY_LIST:
                     if key == 'repository':
                         key_name_in_api = 'name'
                     else:
-                        key_name_in_api= key
-        
+                        key_name_in_api = key 
+
+                    if item[key_name_in_api] is None:
+                        item[key_name_in_api] = ""					
                     try:
-                        temp_json_list.append(JSONObj(key,item[key_name_in_api].strip())) 
+                        temp_json_list.append(JSONObj(key, item[key_name_in_api].strip())) 
                     except:
                         raise Exception("Github api ("+GithubApiInfoObj.GITHUB_API_URL+") does not provide information of "+key+". Please check!\n")
                 

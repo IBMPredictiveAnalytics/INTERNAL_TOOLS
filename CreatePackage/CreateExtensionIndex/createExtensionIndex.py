@@ -85,6 +85,12 @@ def createExtensionIndex(*args):
                       
             content_name = repo_name+tail  
             #repo_content_url = EXT_CONTENT_URL.format(repo_name,content_name)
+			
+            try:
+                repo_content_url = EXT_CONTENT_URL.format(repo_name,getLatestTagNO(repo_name),content_name)
+            except Exception as e:
+                extLogger.warning(str(e))
+                continue				
             repo_content_url = EXT_CONTENT_URL.format(repo_name,getLatestTagNO(repo_name),content_name)
             repo_img_url = IMG_DOWNLOAD_URL.format(repo_name)
                     
