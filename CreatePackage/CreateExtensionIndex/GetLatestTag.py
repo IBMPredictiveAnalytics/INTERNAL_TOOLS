@@ -5,7 +5,7 @@ Created on Dec 24, 2015
 '''
 import urllib.request,json
 
-TOKEN = '4a6db936e057d1832399a91a98a86eddf9a2ed6e'
+TOKEN = ''
 RAW_URL = r'https://api.github.com/repos/ibmpredictiveanalytics/{0}/releases/latest?access_token={1}'
 def getLatestTagNO(ext_name):
     url = RAW_URL.format(ext_name,TOKEN)
