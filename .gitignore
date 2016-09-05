@@ -56,3 +56,13 @@ docs/_build/
 # PyBuilder
 target/
 *pyc
+
+# ExtDnReport
+ExtDnReport/*.csv
+ExtDnReport/log/
+ExtDnReport/modeler_ext_history/
+ExtDnReport/stats_ext_history/
+ExtDnReport/r_essential_history
+
+**/.project
+**/.pydevproject
