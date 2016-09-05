@@ -19,6 +19,6 @@ Tools Index:
 	
 	Description:	Auto scripts used to create release, upload files, change content, and so on
 
-5.	Tool Name: 	ExtDownloadReport
+5.	Tool Name: 	ExtDnReport
 
 	Description:	generate download counts in .csv files for extensions in ibmpredictiveanalytics
