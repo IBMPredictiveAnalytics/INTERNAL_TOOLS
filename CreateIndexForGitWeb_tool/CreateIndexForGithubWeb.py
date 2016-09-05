@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-  
 import urllib.request
 import urllib.error
-import json,re, math, os
+import json
+import re
+import math
+import os
+import sys
 from optparse import OptionParser 
 
 UNICODE_ERROR_LIST = []
@@ -59,8 +63,12 @@ def createIndexForWeb(index_for_web_path):
             
             
             json_item = INDENT_SPACE+'{\n'
-            json_item += INDENT_SPACE + INDENT_SPACE + "\"repository\":" +"\"" + repo_name +"\",\n" 
-            json_item += INDENT_SPACE + INDENT_SPACE + "\"description\":" +"\"" + repo_desc +"\",\n"
+            json_item += INDENT_SPACE + INDENT_SPACE + "\"repository\":" +"\"" + repo_name +"\",\n"
+
+            try:
+                json_item += INDENT_SPACE + INDENT_SPACE + "\"description\":" +"\"" + repo_desc +"\",\n"
+            except TypeError:
+                raise Exception("[Error] " + repo_name + " misses description!")
             json_item += INDENT_SPACE + INDENT_SPACE + "\"pushed_at\":" +"\"" + repo_push_time +"\",\n" 
             
             for key in key_list:
@@ -92,10 +100,16 @@ if __name__ == '__main__':
     if getattr(options, 'outdir') == None or not os.path.isdir(options.outdir):
         parser.error("Please input a valid directory to save index_for_web.json file\n\n")  
     else:
-        index_for_web_path = os.path.join(options.outdir,INDEX_NAME)
+        index_for_web_path = os.path.join(options.outdir, INDEX_NAME)
     
-    print("The index_for_web.json is saved in:"+index_for_web_path)         
-    createIndexForWeb(index_for_web_path)
+    print("The index_for_web.json is saved in:"+index_for_web_path)
+
+    try:
+        createIndexForWeb(index_for_web_path)
+    except Exception as e:
+        print(str(e))
+        sys.exit(-1)
+
     print("Cannot get below repositories information. Please check!")
     printError(UNICODE_ERROR_LIST, "UnicodeDecodeError")
     printError(HTTP_ERROR_LIST, "HTTPError")

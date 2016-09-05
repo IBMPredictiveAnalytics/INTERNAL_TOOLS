@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-  
-import os,CreateIndexForGithubWeb
+import os
+import sys
+import CreateIndexForGithubWeb
 from optparse import OptionParser 
 
 if __name__ == '__main__':
@@ -19,8 +21,12 @@ if __name__ == '__main__':
         exit(1)
     git_bash = options.gitbash
     
-    print("The index_for_web.json is saved in:"+index_for_web_path)         
-    CreateIndexForGithubWeb.createIndexForWeb(index_for_web_path)
+    print("The index_for_web.json is saved in:"+index_for_web_path)
+    try:
+        CreateIndexForGithubWeb.createIndexForWeb(index_for_web_path)
+    except Exception as e:
+        print(str(e))
+        sys.exit(-1)
     print("Cannot get below repositories information. Please check!")
     CreateIndexForGithubWeb.printError(CreateIndexForGithubWeb.UNICODE_ERROR_LIST, "UnicodeDecodeError")
     CreateIndexForGithubWeb.printError(CreateIndexForGithubWeb.HTTP_ERROR_LIST, "HTTPError")
